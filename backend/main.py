@@ -1,7 +1,4 @@
-"""
-FastAPI server for Chest X-Ray Analysis
-Provides REST API endpoints for medical image analysis with DenseNet and Qwen
-"""
+
 
 from fastapi import FastAPI, File, UploadFile, HTTPException, Form
 from fastapi.responses import JSONResponse
@@ -29,7 +26,7 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# ==================== CONFIGURATION ====================
+
 class Config:
     #configuration
     BASE_DIR = Path(__file__).parent
@@ -201,7 +198,6 @@ def determine_location(x, y):
     return f"{vertical} {horizontal}"
 
 
-# ==================== QWEN REPORT GENERATOR ====================
 class QwenReportGenerator:
     # slm report using qwen and hugging face api
     
@@ -553,7 +549,6 @@ Tidak diperlukan pemeriksaan lanjutan saat ini."""
 
 @app.get("/models/info")
 async def get_model_info():
-    """Get information about loaded models"""
     return {
         "densenet_path": Config.DENSENET_MODEL_PATH,
         "qwen_model": Config.QWEN_MODEL,
