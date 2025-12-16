@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  api:
+    build: .
+    container_name: chest_xray_api
+    ports:
+      - "8000:8000"
+    environment:
+      - USE_CPU=true
+      - HF_API_KEY=${HF_API_KEY}
+      - QWEN_MODEL=Qwen/Qwen2.5-1.5B-Instruct
+    volumes:
+      - ./models:/app/models
+      - ./index.html:/app/index.html
+    networks:
+      - chest-xray-network
+    restart: unless-stopped
+
+networks:
+  chest-xray-network:
+    driver: bridge

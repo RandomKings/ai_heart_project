@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chest X-Ray Analysis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            color: #1a1a2e;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 70px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #e8ecf1;
+        }
+
+        .header-icon {
+            width: 64px;
+            height: 64px;
+            background: #f0f7ff;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 28px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: #6b7280;
+            font-weight: 400;
+        }
+
+        .upload-section {
+            background: #fafbfc;
+            border: 2px dashed #d1d9e6;
+            border-radius: 16px;
+            padding: 60px 40px;
+            text-align: center;
+            margin-bottom: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .upload-section:hover {
+            background: #f5f8fb;
+            border-color: #0077b6;
+        }
+
+        .upload-section.drag-over {
+            background: #f0f7ff;
+            border-color: #0077b6;
+            border-style: solid;
+        }
+
+        .upload-icon {
+            width: 56px;
+            height: 56px;
+            background: #ffffff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .upload-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: #0077b6;
+        }
+
+        .upload-section h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .upload-section p {
+            color: #6b7280;
+            font-size: 0.9375rem;
+        }
+
+        .upload-section .formats {
+            color: #9ca3af;
+            font-size: 0.8125rem;
+            margin-top: 16px;
+        }
+
+        .settings-section {
+            margin-bottom: 50px;
+        }
+
+        .settings-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .setting-group-full {
+            grid-column: 1 / -1;
+            background: #fafbfc;
+            padding: 20px 24px;
+            border-radius: 12px;
+            border: 1px solid #e8ecf1;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #0077b6;
+        }
+
+        .checkbox-wrapper label {
+            margin: 0;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox-description {
+            font-size: 0.8125rem;
+            color: #6b7280;
+            margin-top: 4px;
+            margin-left: 32px;
+        }
+
+        .setting-group {
+            background: #fafbfc;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #e8ecf1;
+        }
+
+        .setting-group label {
+            display: block;
+            font-weight: 500;
+            color: #1a1a2e;
+            margin-bottom: 12px;
+            font-size: 0.9375rem;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d9e6;
+            border-radius: 8px;
+            font-size: 0.9375rem;
+            font-family: inherit;
+            color: #1a1a2e;
+            background: #ffffff;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236b7280' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #0077b6;
+            box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.1);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            background: #e8ecf1;
+            border: none;
+            border-radius: 3px;
+            /* -webkit-appearance: none; */
+            margin-top: 8px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #0077b6;
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0, 119, 182, 0.3);
+            transition: transform 0.2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        .threshold-display {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .threshold-value {
+            background: #0077b6;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+        }
+
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        .analyze-btn {
+            width: 100%;
+            padding: 16px 32px;
+            background: #0077b6;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 30px;
+        }
+
+        .analyze-btn:hover:not(:disabled) {
+            background: #005f8f;
+            box-shadow: 0 4px 12px rgba(0, 119, 182, 0.25);
+        }
+
+        .analyze-btn:disabled {
+            background: #d1d9e6;
+            cursor: not-allowed;
+        }
+
+        .preview-section {
+            display: none;
+            margin-bottom: 50px;
+            padding: 30px;
+            background: #fafbfc;
+            border-radius: 12px;
+            border: 1px solid #e8ecf1;
+        }
+
+        .preview-section h3 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .preview-section img {
+            max-width: 100%;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .cam-visualization {
+            position: relative;
+            display: inline-block;
+            max-width: 100%;
+        }
+
+        .cam-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .bbox-overlay {
+            position: absolute;
+            border: 2px solid #ef4444;
+            border-style: dashed;
+            pointer-events: none;
+            border-radius: 4px;
+        }
+
+        .bbox-label {
+            position: absolute;
+            background: #ef4444;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .results-section {
+            display: none;
+            padding-top: 50px;
+            border-top: 1px solid #e8ecf1;
+        }
+
+        .results-header {
+            margin-bottom: 40px;
+        }
+
+        .results-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 40px;
+            display: none;
+        }
+
+        .spinner {
+            border: 3px solid #e8ecf1;
+            border-top: 3px solid #0077b6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 24px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            color: #1a1a2e;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .loading .sub {
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+
+        .visualization-section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .visualization-card {
+            background: #fafbfc;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e8ecf1;
+        }
+
+        .visualization-card img {
+            max-width: 100%;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .disease-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 50px;
+        }
+
+        .disease-card {
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #e8ecf1;
+            transition: box-shadow 0.2s;
+        }
+
+        .disease-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .disease-indicator {
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .disease-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+        }
+
+        .disease-indo {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+
+        .disease-prob {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #0077b6;
+            margin-bottom: 8px;
+        }
+
+        .disease-location {
+            font-size: 0.8125rem;
+            color: #9ca3af;
+        }
+
+        .report-section {
+            background: #fafbfc;
+            padding: 32px;
+            border-radius: 12px;
+            border: 1px solid #e8ecf1;
+        }
+
+        .report-section h3 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .report-text {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            color: #374151;
+            font-size: 0.9375rem;
+        }
+
+        .error-message {
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            display: none;
+            font-size: 0.9375rem;
+            border: 1px solid #fecaca;
+        }
+
+        .no-findings {
+            text-align: center;
+            padding: 50px 40px;
+            background: #f0fdf4;
+            border-radius: 12px;
+            border: 1px solid #bbf7d0;
+        }
+
+        .no-findings-icon {
+            width: 56px;
+            height: 56px;
+            background: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .no-findings h3 {
+            color: #166534;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .no-findings p {
+            color: #6b7280;
+            font-size: 0.9375rem;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .all-predictions-section {
+            margin-bottom: 50px;
+            margin-top: 40px;
+        }
+
+        .predictions-toggle {
+            background: linear-gradient(135deg, #0077b6 0%, #005f8f 100%);
+            border: none;
+            padding: 14px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: white;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 8px rgba(0, 119, 182, 0.15);
+        }
+
+        .predictions-toggle:hover {
+            background: linear-gradient(135deg, #005f8f 0%, #003d5c 100%);
+            box-shadow: 0 4px 12px rgba(0, 119, 182, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .predictions-toggle svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .predictions-toggle.active svg {
+            transform: rotate(180deg);
+        }
+
+        .predictions-content {
+            display: none;
+            margin-top: 24px;
+            background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+            border-radius: 12px;
+            padding: 32px;
+            border: 1px solid #e8ecf1;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+        }
+
+        .predictions-content.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .prediction-item {
+            display: grid;
+            grid-template-columns: 200px 1fr 80px;
+            gap: 20px;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #e8ecf1;
+            transition: background 0.2s;
+        }
+
+        .prediction-item:hover {
+            background: rgba(0, 119, 182, 0.02);
+            padding: 16px 12px;
+            margin: 0 -12px;
+            border-radius: 6px;
+        }
+
+        .prediction-item:last-child {
+            border-bottom: none;
+        }
+
+        .prediction-name {
+            font-size: 0.9375rem;
+            color: #1a1a2e;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        .prediction-indo {
+            font-size: 0.8125rem;
+            color: #6b7280;
+            margin-top: 4px;
+            font-weight: 400;
+        }
+
+        .prediction-bar {
+            height: 8px;
+            background: #e8ecf1;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .prediction-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981 0%, #f59e0b 45%, #ef4444 100%);
+            border-radius: 4px;
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 8px rgba(0, 119, 182, 0.2);
+        }
+
+        .prediction-value {
+            font-size: 0.9375rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            text-align: right;
+            min-width: 70px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .prediction-value.high {
+            color: #ef4444;
+        }
+
+        .prediction-value.medium {
+            color: #f59e0b;
+        }
+
+        .prediction-value.low {
+            color: #10b981;
+        }
+
+        @media (max-width: 768px) {
+            .prediction-item {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .prediction-value {
+                text-align: left;
+            }
+
+            .container {
+                padding: 40px 24px;
+            }
+
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .header {
+                margin-bottom: 50px;
+            }
+
+            .upload-section {
+                padding: 40px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Chest X-Ray Analysis</h1>
+            <p>AI-Powered Disease Detection with Indonesian Medical Reports</p>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="upload-section" id="uploadSection">
+            <div class="upload-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                </svg>
+            </div>
+            <h2>Upload Chest X-Ray Image</h2>
+            <p>Click to select or drag and drop your image here</p>
+            <p class="formats">Supported formats: PNG, JPG, JPEG</p>
+            <input type="file" id="fileInput" accept="image/png,image/jpeg,image/jpg">
+        </div>
+
+        <!-- Settings Section -->
+        <div class="settings-section">
+            <div class="settings-label">Settings</div>
+            <div class="settings-grid">
+                <div class="setting-group">
+                    <label for="epochSelect">Model Epoch</label>
+                    <select id="epochSelect">
+                        <option value="densenet_epoch_01.pth">Epoch 1</option>
+                        <option value="densenet_epoch_02.pth">Epoch 2</option>
+                        <option value="densenet_epoch_03.pth">Epoch 3</option>
+                        <option value="densenet_epoch_04.pth">Epoch 4</option>
+                        <option value="densenet_epoch_05.pth">Epoch 5</option>
+                        <option value="densenet_epoch_06.pth" selected>Epoch 6 (Default)</option>
+                        <option value="densenet_epoch_07.pth">Epoch 7</option>
+                        <option value="densenet_epoch_08.pth">Epoch 8</option>
+                        <option value="densenet_epoch_09.pth">Epoch 9</option>
+                        <option value="densenet_epoch_10.pth">Epoch 10</option>
+                    </select>
+                </div>
+
+                <div class="setting-group">
+                    <label for="thresholdSlider">Detection Threshold</label>
+                    <div class="threshold-display">
+                        <span class="threshold-value" id="thresholdValue">0.20</span>
+                    </div>
+                    <input type="range" id="thresholdSlider" min="0" max="1" step="0.05" value="0.20">
+                    <div class="range-labels">
+                        <span>Less Sensitive</span>
+                        <span>More Sensitive</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="setting-group-full">
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="showAllPredictions" checked>
+                    <label for="showAllPredictions">Show all 14 disease predictions (not just above threshold)</label>
+                </div>
+                <div class="checkbox-description">Show all diseases confidence </div>
+            </div>
+        </div>
+
+        <!-- Preview Section -->
+        <div class="preview-section" id="previewSection">
+            <h3>Image Preview</h3>
+            <img id="imagePreview" alt="X-ray preview">
+        </div>
+
+        <!-- Analyze Button -->
+        <button class="analyze-btn" id="analyzeBtn" disabled>
+            Analyze X-Ray
+        </button>
+
+        <!-- Error Message -->
+        <div class="error-message" id="errorMessage"></div>
+
+        <!-- Loading Indicator -->
+        <div class="loading" id="loadingIndicator">
+            <div class="spinner"></div>
+            <p>Analyzing image and generating medical report...</p>
+            <p class="sub">This may take 10-30 seconds</p>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="resultsSection">
+            <div class="results-header">
+                <h2>Analysis Results</h2>
+            </div>
+            
+            <!-- CAM Visualization -->
+            <div class="visualization-section">
+                <div class="section-title">Disease Localization</div>
+                <div class="visualization-card">
+                    <div class="cam-visualization" id="camVisualization">
+                        <img id="camImage" alt="X-ray with CAM">
+                        <div id="bboxContainer"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="diseaseResults" class="disease-grid"></div>
+
+            <!-- All Predictions Section -->
+            <div class="all-predictions-section">
+                <button class="predictions-toggle" id="predictionsToggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    </svg>
+                    Show Disease Predictions (All 14)
+                </button>
+                <div class="predictions-content" id="predictionsContent"></div>
+            </div>
+
+            <div class="report-section">\n                <h3>Medical Report (Indonesian)</h3>
+                <div class="report-text" id="reportText"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://2jf3v2fqhu.ap-southeast-1.awsapprunner.com';
+        let selectedFile = null;
+
+        const uploadSection = document.getElementById('uploadSection');
+        const fileInput = document.getElementById('fileInput');
+        const previewSection = document.getElementById('previewSection');
+        const imagePreview = document.getElementById('imagePreview');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const epochSelect = document.getElementById('epochSelect');
+        const thresholdSlider = document.getElementById('thresholdSlider');
+        const thresholdValue = document.getElementById('thresholdValue');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const resultsSection = document.getElementById('resultsSection');
+        const errorMessage = document.getElementById('errorMessage');
+        const diseaseResults = document.getElementById('diseaseResults');
+        const reportText = document.getElementById('reportText');
+        const camImage = document.getElementById('camImage');
+        const bboxContainer = document.getElementById('bboxContainer');
+        const camVisualization = document.getElementById('camVisualization');
+        const predictionsToggle = document.getElementById('predictionsToggle');
+        const predictionsContent = document.getElementById('predictionsContent');
+        const showAllPredictionsCheckbox = document.getElementById('showAllPredictions');
+
+        // Upload section click
+        uploadSection.addEventListener('click', () => fileInput.click());
+
+        // File input change
+        fileInput.addEventListener('change', handleFileSelect);
+
+        // Drag and drop
+        uploadSection.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadSection.classList.add('drag-over');
+        });
+
+        uploadSection.addEventListener('dragleave', () => {
+            uploadSection.classList.remove('drag-over');
+        });
+
+        uploadSection.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadSection.classList.remove('drag-over');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                handleFileSelect();
+            }
+        });
+
+        // Threshold slider
+        thresholdSlider.addEventListener('input', (e) => {
+            thresholdValue.textContent = parseFloat(e.target.value).toFixed(2);
+        });
+
+        // Analyze button
+        analyzeBtn.addEventListener('click', analyzeImage);
+
+        // Epoch selection - update API call
+        epochSelect.addEventListener('change', () => {
+            // Just update the selection, will be used when analyzing
+            console.log('Selected epoch:', epochSelect.value);
+        });
+
+        // Predictions toggle
+        predictionsToggle.addEventListener('click', () => {
+            predictionsContent.classList.toggle('show');
+            predictionsToggle.classList.toggle('active');
+            
+            const isShown = predictionsContent.classList.contains('show');
+            const totalCount = showAllPredictionsCheckbox.checked ? 'All 14' : 
+                               predictionsContent.querySelectorAll('.prediction-item').length;
+            predictionsToggle.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+                ${isShown ? 'Hide' : 'Show'} Disease Predictions (${totalCount})
+            `;
+        });
+
+        function handleFileSelect() {
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            // Validate file type
+            if (!file.type.match('image/(png|jpeg|jpg)')) {
+                showError('Please select a valid image file (PNG, JPG, JPEG)');
+                return;
+            }
+
+            selectedFile = file;
+
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result;
+                previewSection.style.display = 'block';
+                analyzeBtn.disabled = false;
+                resultsSection.style.display = 'none';
+                hideError();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function analyzeImage() {
+            if (!selectedFile) return;
+
+            // Hide previous results
+            resultsSection.style.display = 'none';
+            hideError();
+
+            // Show loading
+            loadingIndicator.style.display = 'block';
+            analyzeBtn.disabled = true;
+
+            try {
+                // Create form data
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+                formData.append('threshold', thresholdSlider.value);
+                formData.append('model_epoch', epochSelect.value);
+
+                // Call API
+                const response = await fetch(`${API_URL}/analyze`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Analysis failed');
+                }
+
+                const result = await response.json();
+                displayResults(result);
+
+            } catch (error) {
+                showError(`Error: ${error.message}`);
+                console.error('Analysis error:', error);
+            } finally {
+                loadingIndicator.style.display = 'none';
+                analyzeBtn.disabled = false;
+            }
+        }
+
+        function displayResults(result) {
+            // Clear previous results
+            diseaseResults.innerHTML = '';
+            bboxContainer.innerHTML = '';
+
+            // Display X-ray with CAM visualization
+            if (selectedFile) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    camImage.src = e.target.result;
+                    camImage.onload = () => {
+                        // Draw bounding boxes after image loads
+                        drawBoundingBoxes(result.detected_diseases);
+                    };
+                };
+                reader.readAsDataURL(selectedFile);
+            }
+
+            if (result.detected_diseases.length === 0) {
+                diseaseResults.innerHTML = `
+                    <div class="no-findings">
+                        <div class="no-findings-icon">✓</div>
+                        <h3>No Significant Findings</h3>
+                        <p>The analysis did not detect any diseases above the threshold of ${result.threshold_used.toFixed(2)}</p>
+                    </div>
+                `;
+                camVisualization.style.display = 'none';
+            } else {
+                camVisualization.style.display = 'inline-block';
+                
+                // Create disease cards
+                result.detected_diseases.forEach(disease => {
+                    const card = document.createElement('div');
+                    card.className = 'disease-card';
+                    card.innerHTML = `
+                        <div class="disease-name"><span class="disease-indicator"></span>${disease.disease_name}</div>
+                        <div class="disease-indo">${disease.indonesian_name}</div>
+                        <div class="disease-prob">${(disease.probability * 100).toFixed(1)}%</div>
+                        <div class="disease-location">📍 ${disease.location}</div>
+                    `;
+                    diseaseResults.appendChild(card);
+                });
+            }
+
+            // Display all predictions
+            displayAllPredictions(result.all_predictions);
+
+            // Display report
+            reportText.textContent = result.medical_report;
+
+            // Show results section
+            resultsSection.style.display = 'block';
+
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function displayAllPredictions(predictions) {
+            predictionsContent.innerHTML = '';
+            
+            // Convert predictions object to sorted array
+            let sortedPredictions = Object.entries(predictions)
+                .map(([name, prob]) => ({
+                    name: name,
+                    indonesian: diseaseNameMap[name] || name,
+                    probability: prob
+                }))
+                .sort((a, b) => b.probability - a.probability);
+            
+            // Filter by threshold if checkbox is unchecked
+            if (!showAllPredictionsCheckbox.checked) {
+                const currentThreshold = parseFloat(thresholdSlider.value);
+                sortedPredictions = sortedPredictions.filter(pred => pred.probability >= currentThreshold);
+            }
+            
+            // Update toggle button text
+            const totalCount = showAllPredictionsCheckbox.checked ? 'All 14' : sortedPredictions.length;
+            if (predictionsToggle.classList.contains('active')) {
+                predictionsToggle.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    </svg>
+                    Hide Disease Predictions (${totalCount})
+                `;
+            } else {
+                predictionsToggle.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    </svg>
+                    Show Disease Predictions (${totalCount})
+                `;
+            }
+            
+            sortedPredictions.forEach(pred => {
+                const item = document.createElement('div');
+                item.className = 'prediction-item';
+                
+                const percentage = (pred.probability * 100).toFixed(1);
+                let valueClass = 'low';
+                if (pred.probability >= 0.5) valueClass = 'high';
+                else if (pred.probability >= 0.2) valueClass = 'medium';
+                
+                item.innerHTML = `
+                    <div>
+                        <div class="prediction-name">${pred.name}</div>
+                        <div class="prediction-indo">${pred.indonesian}</div>
+                    </div>
+                    <div class="prediction-bar">
+                        <div class="prediction-fill" style="width: ${percentage}%"></div>
+                    </div>
+                    <div class="prediction-value ${valueClass}">${percentage}%</div>
+                `;
+                predictionsContent.appendChild(item);
+            });
+        }
+
+        // Disease name mapping for Indonesian
+        const diseaseNameMap = {
+            'Atelectasis': 'Atelektasis',
+            'Cardiomegaly': 'Kardiomegali',
+            'Effusion': 'Efusi Pleura',
+            'Infiltration': 'Infiltrat',
+            'Mass': 'Massa',
+            'Nodule': 'Nodul',
+            'Pneumonia': 'Pneumonia',
+            'Pneumothorax': 'Pneumotoraks',
+            'Consolidation': 'Konsolidasi',
+            'Edema': 'Edema Paru',
+            'Emphysema': 'Emfisema',
+            'Fibrosis': 'Fibrosis',
+            'Pleural_Thickening': 'Penebalan Pleura',
+            'Hernia': 'Hernia'
+        };
+
+        function drawBoundingBoxes(diseases) {
+            const imgWidth = camImage.offsetWidth;
+            const imgHeight = camImage.offsetHeight;
+
+            // Colors for different diseases
+            const colors = [
+                '#ef4444', '#f97316', '#eab308', '#22c55e', 
+                '#14b8a6', '#0ea5e9', '#8b5cf6', '#ec4899'
+            ];
+
+            diseases.forEach((disease, index) => {
+                if (disease.bbox) {
+                    const bbox = disease.bbox;
+                    const color = colors[index % colors.length];
+
+                    // Create bounding box div
+                    const bboxDiv = document.createElement('div');
+                    bboxDiv.className = 'bbox-overlay';
+                    bboxDiv.style.left = `${bbox.x * imgWidth}px`;
+                    bboxDiv.style.top = `${bbox.y * imgHeight}px`;
+                    bboxDiv.style.width = `${bbox.width * imgWidth}px`;
+                    bboxDiv.style.height = `${bbox.height * imgHeight}px`;
+                    bboxDiv.style.borderColor = color;
+
+                    // Create label
+                    const label = document.createElement('div');
+                    label.className = 'bbox-label';
+                    label.style.backgroundColor = color;
+                    label.style.left = `${bbox.x * imgWidth}px`;
+                    label.style.top = `${(bbox.y * imgHeight) - 30}px`;
+                    label.textContent = `${disease.disease_name} ${(disease.probability * 100).toFixed(0)}%`;
+
+                    bboxContainer.appendChild(bboxDiv);
+                    bboxContainer.appendChild(label);
+                }
+            });
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+
+        function hideError() {
+            errorMessage.style.display = 'none';
+        }
+
+        // Check API connection on load
+        async function checkAPI() {
+            try {
+                const response = await fetch(`${API_URL}/`);
+                const data = await response.json();
+                console.log('API Status:', data);
+            } catch (error) {
+                showError('Cannot connect to API server. Make sure it is running on http://localhost:8000');
+            }
+        }
+
+        checkAPI();
+    </script>
+</body>
+</html>
