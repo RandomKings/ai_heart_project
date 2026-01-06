@@ -12,6 +12,13 @@ This application combines deep learning image classification with AI-powered rep
 - **Report Generation**: Qwen2.5-15B via Hugging Face API
 - **Deployment**: Dockerized and deployed on AWS App Runner
 
+
+<img width="875" height="498" alt="aws" src="https://github.com/user-attachments/assets/e8b1cd46-01e2-4b49-9d97-690e8fafdfc8" />
+
+
+<img width="1783" height="722" alt="cloudwatch aws" src="https://github.com/user-attachments/assets/3e341f1f-18e8-4f94-aa5b-806aa1df9543" />
+
+
 ### Frontend
 - **Deployment**: Vercel
 - **Communication**: REST API calls to backend endpoints
@@ -79,31 +86,13 @@ This application combines deep learning image classification with AI-powered rep
 
 ### Backend Deployment (AWS App Runner)
 
-1. **Create Dockerfile**
-   
-   Ensure your backend has a properly configured Dockerfile:
-   ```dockerfile
-   FROM python:3.9-slim
-   
-   WORKDIR /app
-   
-   COPY requirements.txt .
-   RUN pip install --no-cache-dir -r requirements.txt
-   
-   COPY . .
-   
-   EXPOSE 8000
-   
-   CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
-   ```
-
-2. **Build and test Docker image locally**
+1. **Build and test Docker image locally**
    ```bash
    docker build -t medical-ai-backend .
    docker run -p 8000:8000 medical-ai-backend
    ```
 
-3. **Deploy to AWS App Runner**
+2. **Deploy to AWS App Runner**
    - Push your Docker image to Amazon ECR or connect your GitHub repository
    - Create a new App Runner service
    - Configure environment variables (add your `QWEN_MODEL` API key)
@@ -146,35 +135,3 @@ Accepts medical images and returns:
 5. Classification results are passed to Qwen2.5-15B SLM
 6. SLM generates comprehensive medical report
 7. Report is returned to frontend and displayed to user
-
-## Important Notes
-
-- **Security**: Never commit your `.env` file or API keys to version control
-- **Model Files**: Ensure trained model files are properly included in deployment
-- **API Limits**: Monitor Hugging Face API usage to stay within rate limits
-- **CORS**: Backend should have proper CORS configuration for frontend communication
-
-## Troubleshooting
-
-### Backend won't start
-- Verify all dependencies are installed: `pip install -r requirements.txt`
-- Check that `.env` file exists with valid `QWEN_MODEL` key
-- Ensure port 8000 is not already in use
-
-### Frontend can't connect to backend
-- Verify API URL is correctly configured
-- Check that backend is running
-- Ensure CORS is properly configured in backend
-
-### Model loading errors
-- Confirm model files are in correct directory
-- Check available memory (models can be large)
-- Verify model file permissions
-
-## License
-
-[Your License Here]
-
-## Contributors
-
-[Your Team/Contributors]
